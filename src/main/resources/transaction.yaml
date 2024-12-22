@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Transaction
+  description: API para gestionar las transacciones de las cuentas.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+paths:
+  /transaction/list:
+    get:
+      summary: Devuelve las transacciones de las cuentas de un cliente del banco
+      operationId: getTransactions
+      description: Obtiene las transacciones.
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionResponse"
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+  /transaction:
+    post:
+      summary: Registra una transacción de una cuenta de un cliente del banco
+      operationId: registerTransaction
+      description: Crea una nueva transacción de un cliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequest"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Se registro de forma exitosa."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+  /transaction/{id}:
+    get:
+      summary: Obtiene una transacción de una cuenta de un cliente del banco
+      operationId: getTransaction
+      description: Obtiene una transacción por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la transacción
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionResponse"
+        "404":
+          description: "No se encontró la transacción"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Transacción no encontrada."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+    put:
+      summary: Actualiza una transacción de una cuenta de un cliente del banco
+      operationId: updateTransaction
+      description: Actualiza una transacción por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la transacción
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequest"
+      responses:
+        "200":
+          description: "Operación finalizada correctamente"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Se actualizo de forma exitosa."
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+    delete:
+      summary: Elimina una transacción de una cuenta de un cliente del banco
+      operationId: removeTransaction
+      description: Elimina una transacción por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la transacción
+          schema:
+            type: string
+            example: "6764c17cb1fa3cd77d0644d8"
+      responses:
+        "500":
+          description: "Errores técnicos"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Error en el servidor."
+components:
+  schemas:
+    TransactionResponse:
+      type: object
+      properties:
+        id:
+          description: "Id de la transacción"
+          type: string
+          example: "6764c17cb1fa3cd77d0644d8"
+        transactionType:
+          description: "Tipo de transacción"
+          type: string
+          example: "Depósito"
+        accountId:
+          description: "Id de la cuenta de esta transacción"
+          type: string
+          example: "6764c17cb1fa3cd77d0644d8"
+        amount:
+          description: "Monto de la transacción"
+          type: string
+          example: "250"
+        transactionDate:
+          description: "Fecha de la transacción"
+          type: string
+          example: "21/12/2024"
+        description:
+          description: "Descripción de la transacción"
+          type: string
+          example: "Se realiza depósito de la cuenta"
+    TransactionRequest:
+      type: object
+      required:
+        - transactionType
+        - accountId
+        - amount
+        - transactionDate
+      properties:
+        transactionType:
+          description: "Tipo de transacción"
+          type: string
+          example: "Depósito"
+        accountId:
+          description: "Id de la cuenta de esta transacción"
+          type: string
+          example: "6764c17cb1fa3cd77d0644d8"
+        amount:
+          description: "Monto de la transacción"
+          type: string
+          example: "250"
+        transactionDate:
+          description: "Fecha de la transacción"
+          type: string
+          example: "21/12/2024"
+        description:
+          description: "Descripción de la transacción"
+          type: string
+          example: "Se realiza depósito de la cuenta"
